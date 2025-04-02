@@ -1,10 +1,27 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import '../configs/constants/app_constants.dart';
 
 class DioConfig {
-  static Dio createDio({required String baseUrl}) {
+  static final DioConfig _instance = DioConfig._internal();
+  late final Dio _dio;
+
+  factory DioConfig() {
+    return _instance;
+  }
+
+  DioConfig._internal() {
+    _dio = _createDio();
+  }
+
+  static Dio getDioInstance() {
+    return DioConfig()._dio;
+  }
+
+  Dio _createDio() {
     final dio = Dio(
       BaseOptions(
-        baseUrl: 'http://localhost:3000/api/',
+        baseUrl: AppConstant.baseUrl,
         headers: {
           'Content-Type': 'application/json',
         },
@@ -14,11 +31,12 @@ class DioConfig {
       ),
     );
 
-    /// ghi log response và request
-    dio.interceptors.add(LogInterceptor(
-      responseBody: true,
-      requestBody: true,
-    ));
+    if (kDebugMode) {
+      dio.interceptors.add(LogInterceptor(
+        responseBody: true,
+        requestBody: true,
+      ));
+    }
 
     return dio;
   }
