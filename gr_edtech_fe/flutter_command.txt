@@ -1,0 +1,11 @@
+slutter doctor
+flutter create name
+flutter run -d edge
+flutter pub get
+flutter pub run build_runner build --delete-conflicting-outputs
+
+
+firebase login
+dart pub global activate flutterfire_cli
+flutterfire configure
+flutter pub add firebase_core
